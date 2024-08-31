@@ -18,7 +18,7 @@ shift = 16;
 % voiced_index = 4500;
 voiced_index = 11648;
 % voiced = d(4400:4400+2*ms30);
-SNR = 25;
+SNR = 40;
 
 mic1_aud = 0.9*d;
 mic2_aud = 0.8*d;
@@ -41,9 +41,6 @@ mic2_aud_lpr = LPres(mic2_aud_noisy,fs,20,5,10,1);
 
 mic1_voiced_lpr = mic1_aud_lpr(voiced_index:voiced_index+ms30-1);
 mic2_voiced_lpr = mic2_aud_lpr(voiced_index+shift: voiced_index+shift+ms30-1);
-% mic1_voiced_lpr = mic1_voiced_lpr.*hamming_w;
-% mic2_voiced_lpr = mic2_voiced_lpr.*hamming_w;
-
 mic1_voiced_lpr_henv = HilbertEnv(mic1_voiced_lpr,fs);
 mic2_voiced_lpr_henv = HilbertEnv(mic2_voiced_lpr, fs);
 
@@ -92,7 +89,7 @@ disp("Voiced segment: estimated delay = " + estimated_delay)
 
 figure(2);
 plot(cc)
-title('H Env CCF of voiced segment');
+title('CCF of voiced segment');
 hold on;
 scatter(peak_position, peak_value, "filled");
 
@@ -107,8 +104,6 @@ mic2_unvoiced = mic2_unvoiced.*hamming_w;
 
 mic1_unvoiced_lpr = mic1_aud_lpr(unvoiced_index:unvoiced_index+ms30-1);
 mic2_unvoiced_lpr = mic2_aud_lpr(unvoiced_index+shift: unvoiced_index+shift+ms30-1);
-% mic1_unvoiced_lpr = mic1_unvoiced_lpr.*hamming_w;
-% mic2_unvoiced_lpr = mic2_unvoiced_lpr.*hamming_w;
 mic1_unvoiced_lpr_henv = HilbertEnv(mic1_unvoiced_lpr, fs);
 mic2_unvoiced_lpr_henv = HilbertEnv(mic2_unvoiced_lpr, fs);
 
@@ -140,7 +135,7 @@ disp("Unvoiced segment: estimated delay = " + estimated_delay)
 
 figure(4);
 plot(cc);
-title('H Env CCF of Unvoiced ')
+title('CCF Unvoiced')
 hold on;
 scatter(peak_position, peak_value, "filled");
 

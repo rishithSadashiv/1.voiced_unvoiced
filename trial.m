@@ -23,6 +23,10 @@ mic2_aud = 0.8*d;
 mic1_voiced = mic1_aud(voiced_index:voiced_index+ms30-1);
 mic2_voiced = mic2_aud(voiced_index+shift: voiced_index+shift+ms30-1);
 
+hamming_w = hamming(length(mic1_voiced));
+mic1_voiced = mic1_voiced.*hamming_w;
+mic2_voiced = mic2_voiced.*hamming_w;
+
 mic1_aud_lpr = LPres(mic1_aud,fs,20,5,10,1);
 mic2_aud_lpr = LPres(mic2_aud,fs,20,5,10,1);
 
@@ -80,6 +84,8 @@ scatter(peak_position, peak_value, "filled");
 unvoiced_index = 22336;
 mic1_unvoiced = mic1_aud(unvoiced_index:unvoiced_index+ms30-1);
 mic2_unvoiced = mic2_aud(unvoiced_index+shift: unvoiced_index+shift+ms30-1);
+mic1_unvoiced = mic1_unvoiced.*hamming_w;
+mic2_unvoiced = mic2_unvoiced.*hamming_w;
 
 mic1_unvoiced_lpr = mic1_aud_lpr(unvoiced_index:unvoiced_index+ms30-1);
 mic2_unvoiced_lpr = mic2_aud_lpr(unvoiced_index+shift: unvoiced_index+shift+ms30-1);
@@ -114,7 +120,7 @@ scatter(peak_position, peak_value, "filled");
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% Using GCC-PHAT
 
-[estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_voiced, mic2_voiced, "cc");
+[estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_voiced, mic2_voiced, "phat");
 disp("Voiced segment: estimated delay = " + estimated_delay)
 
 figure(5);
@@ -122,7 +128,7 @@ plot(cc)
 hold on;
 scatter(peak_position, peak_value, "filled");
 
-[estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_unvoiced, mic2_unvoiced, "cc");
+[estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_unvoiced, mic2_unvoiced, "phat");
 disp("Unvoiced segment: estimated delay = " + estimated_delay)
 
 figure(6);

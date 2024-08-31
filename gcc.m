@@ -34,7 +34,7 @@ Phi_z1z2 = Z1.*conj(Z2);
 if(strcmp(flag,'cc'))
    phi_z1z2 = ifft(Phi_z1z2);
    zc = [phi_z1z2(NFFT-M+2:NFFT) phi_z1z2(1:M)];  % re-arrange the vector
-elseif(strcmp(flag,'phat'));
+elseif(strcmp(flag,'phat'))
    phi_z1z2 = ifft(Phi_z1z2 ./ max(abs(Phi_z1z2),eps));
    zc = [phi_z1z2(NFFT-M+2:NFFT) phi_z1z2(1:M)];  % re-arrange the vector
 
