@@ -7,6 +7,7 @@ function [estimated_delay,cc,peak_position,peak_value] = delay_gcc( input1, inpu
         error('- ¡Both inputs must be the same length to correlate them!');
     end
     cc = gcc(input1,input2, method);
+    cc = cc/max(cc);
     [value, peak_positions] = max(cc);
     peak_position = max(peak_positions);
     peak_value = value;

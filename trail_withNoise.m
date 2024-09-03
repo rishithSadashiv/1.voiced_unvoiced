@@ -18,7 +18,7 @@ shift = 16;
 % voiced_index = 4500;
 voiced_index = 11648;
 % voiced = d(4400:4400+2*ms30);
-SNR = 25;
+SNR = 10;
 
 mic1_aud = 0.9*d;
 mic2_aud = 0.8*d;
@@ -159,7 +159,7 @@ title('CCF GCC-PHAT voiced')
 hold on;
 scatter(peak_position, peak_value, "filled");
 
-[estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_unvoiced, mic2_unvoiced, "cc");
+[estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_unvoiced, mic2_unvoiced, "phat");
 disp("Unvoiced segment: estimated delay = " + estimated_delay)
 
 figure(6);
