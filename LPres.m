@@ -116,7 +116,7 @@ pause;
 			       PrevFrm=zeros(1,lporder);
 
 			else
-
+                
 				PrevFrm=speech((i-lporder):(i-1));
 
 			end
@@ -155,7 +155,7 @@ pause;
 			lpcoef	= lpc(hamming(length(SpFrm)).*SpFrm,lporder);
 
 			LPCs(j,:)	= real(lpcoef);
-
+            
 			PrevFrm	= speech((i-lporder):(i-1));
 
 			ResFrm	= ResFilter_v2(real(PrevFrm),real(SpFrm),real(lpcoef),lporder,Nframesize,0);

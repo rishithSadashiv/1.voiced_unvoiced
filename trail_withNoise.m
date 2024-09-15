@@ -18,7 +18,7 @@ shift = 16;
 % voiced_index = 4500;
 voiced_index = 11648;
 % voiced = d(4400:4400+2*ms30);
-SNR = 10;
+SNR = 30;
 
 mic1_aud = 0.9*d;
 mic2_aud = 0.8*d;
@@ -29,8 +29,8 @@ mic1_voiced = mic1_aud_noisy(voiced_index:voiced_index+ms30-1);
 mic2_voiced = mic2_aud_noisy(voiced_index+shift: voiced_index+shift+ms30-1);
 
 hamming_w = hamming(length(mic1_voiced));
-mic1_voiced = mic1_voiced.*hamming_w;
-mic2_voiced = mic2_voiced.*hamming_w;
+% mic1_voiced = mic1_voiced.*hamming_w;
+% mic2_voiced = mic2_voiced.*hamming_w;
 
 mic1_aud_lpr = LPres(mic1_aud_noisy,fs,20,5,10,1);
 mic2_aud_lpr = LPres(mic2_aud_noisy,fs,20,5,10,1);
@@ -45,7 +45,9 @@ mic2_voiced_lpr = mic2_aud_lpr(voiced_index+shift: voiced_index+shift+ms30-1);
 % mic2_voiced_lpr = mic2_voiced_lpr.*hamming_w;
 
 mic1_voiced_lpr_henv = HilbertEnv(mic1_voiced_lpr,fs);
+mic1_voiced_lpr_henv = mic1_voiced_lpr_henv / max(mic1_voiced_lpr_henv);
 mic2_voiced_lpr_henv = HilbertEnv(mic2_voiced_lpr, fs);
+mic2_voiced_lpr_henv = mic2_voiced_lpr_henv / max(mic2_voiced_lpr_henv);
 
 
 figure(1);
@@ -102,8 +104,8 @@ scatter(peak_position, peak_value, "filled");
 unvoiced_index = 22336;
 mic1_unvoiced = mic1_aud_noisy(unvoiced_index:unvoiced_index+ms30-1);
 mic2_unvoiced = mic2_aud_noisy(unvoiced_index+shift: unvoiced_index+shift+ms30-1);
-mic1_unvoiced = mic1_unvoiced.*hamming_w;
-mic2_unvoiced = mic2_unvoiced.*hamming_w;
+% mic1_unvoiced = mic1_unvoiced.*hamming_w;
+% mic2_unvoiced = mic2_unvoiced.*hamming_w;
 
 mic1_unvoiced_lpr = mic1_aud_lpr(unvoiced_index:unvoiced_index+ms30-1);
 mic2_unvoiced_lpr = mic2_aud_lpr(unvoiced_index+shift: unvoiced_index+shift+ms30-1);
@@ -147,6 +149,9 @@ scatter(peak_position, peak_value, "filled");
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% Using GCC-PHAT
 
+mic1_voiced = mic1_voiced.*hamming_w;
+mic2_voiced = mic2_voiced.*hamming_w;
+
 disp("Using GCC-PHAT");
 [estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_voiced, mic2_voiced, "phat");
 disp("Voiced segment: estimated delay = " + estimated_delay)
@@ -158,6 +163,8 @@ title('CCF GCC-PHAT voiced')
 
 hold on;
 scatter(peak_position, peak_value, "filled");
+
+
 
 [estimated_delay, cc, peak_position, peak_value] = delay_gcc(mic1_unvoiced, mic2_unvoiced, "phat");
 disp("Unvoiced segment: estimated delay = " + estimated_delay)
