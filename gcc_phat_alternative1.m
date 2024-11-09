@@ -8,7 +8,6 @@ close all;
 
 
 [d,fs]=audioread('./arctic_b0399.wav');
-
 % [d,fs]=audioread('new_wavs/arctic_a0023.wav');
 d=d(:,1);
 
@@ -55,18 +54,18 @@ mic2_voiced = mic2_aud(voiced_index+shift:voiced_index+shift+ms30-1);
 disp("Voiced:"+ estimated_delay/fs*1000);
 
 
-figure(1);
-subplot(311);
-plot(mic1_voiced);
-subtitle('Mic-1');
-subplot(312);
-plot(mic2_voiced);
-subtitle('Mic-2');
-subplot(3,1,3);
-plot(GCCn);
-hold on;
-scatter(peak_position, GCCn(peak_position), "filled");
-subtitle('Cross correlation function')
+% figure(1);
+% subplot(311);
+% plot(mic1_voiced);
+% subtitle('Mic-1');
+% subplot(312);
+% plot(mic2_voiced);
+% subtitle('Mic-2');
+% subplot(3,1,3);
+% plot(GCCn);
+% hold on;
+% scatter(peak_position, GCCn(peak_position), "filled");
+% subtitle('Cross correlation function')
 
 
 unvoiced_index = 22336;
@@ -166,8 +165,8 @@ for p=1:length(SNRs)
     d_uv(p,:)=u(1:160);
 end
 
-correct_estimates = sum(computed_delays(:) == shift);
-disp(correct_estimates);
+% correct_estimates = sum(computed_delays(:) == shift);
+% disp(correct_estimates);
 
 frames_index = 1:160;
 
@@ -192,7 +191,8 @@ scatter(frames_index, delay_array(6,:), 'filled');
 ylim([-50 50])
 
 
-writematrix(delay_array, './csv_forPlots/phat_delay_array.csv');
+writematrix(delay_array, './csv_forPlots/phat_delay_array_arctic_b0399.csv');
+writematrix(d_v, './csv_forPlots/phat_delay_vowel_arctic_b0399.csv');
 % writematrix(delay_array, './csv_forPlots/phat_delay_array_2.csv');
 
 % 
@@ -222,7 +222,7 @@ writematrix(delay_array, './csv_forPlots/phat_delay_array.csv');
 % 
 
 
-correctCount_20dB = (d_v(2,:)==16);
+correctCount_20dB = sum(d_v(2,:)==16);
 correctCount5dB = sum(d_v(4,:)==16);
 correctCoungNeg5dB = sum(d_v(6,:)==16);
 
@@ -239,3 +239,32 @@ disp("Correct count 5dB:"+correctCount5dB);
 disp("Correct count -5dB:"+correctCoungNeg5dB);
 
 
+
+
+nbins = 100;
+figure(2);
+% boxchart(delay_array');
+subplot(611);
+histogram(delay_array(1,:),nbins);
+subtitle('No noise');
+xlim([-100 100])
+subplot(612);
+histogram(delay_array(2,:),nbins);
+subtitle('20dB');
+xlim([-100 100])
+subplot(613);
+histogram(delay_array(3,:),nbins);
+subtitle('10dB')
+xlim([-100 100])
+subplot(614);
+histogram(delay_array(4,:),nbins);
+subtitle('5dB');
+xlim([-100 100])
+subplot(615);
+histogram(delay_array(5,:),nbins);
+subtitle('0dB');
+xlim([-100 100])
+subplot(616);
+histogram(delay_array(6,:),nbins);
+subtitle('-5dB')
+xlim([-100 100])

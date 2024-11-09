@@ -5,8 +5,8 @@ clc;
 clear all;
 close all;
 
-% [d,fs]=audioread('./arctic_b0399.wav');
-[d,fs]=audioread('new_wavs/arctic_a0023.wav');
+[d,fs]=audioread('./arctic_b0399.wav');
+% [d,fs]=audioread('new_wavs/arctic_a0023.wav');
 d=d(:,1);
 
 
@@ -111,7 +111,8 @@ for p=1:length(SNRs)
     d_uv(p,:)=u(1:160);
 end
 
-writematrix(delay_array, 'csv_forPlots/merged_delay_array.csv')
+writematrix(delay_array, 'csv_forPlots/merged_delay_array_arctic_b0399.csv')
+writematrix(d_v, 'csv_forPlots/merged_delay_vowel_arctic_b0399.csv')
 
 frames_index = 1:160;
 
@@ -180,6 +181,33 @@ disp("Correct count 20dB:"+correctCount_20dB);
 disp("Correct count 5dB:"+correctCount5dB);
 disp("Correct count -5dB:"+correctCoungNeg5dB);
 
+nbins = 100;
+figure(2);
+% boxchart(delay_array');
+subplot(611);
+histogram(delay_array(1,:),nbins);
+subtitle('No noise');
+xlim([-100 100])
+subplot(612);
+histogram(delay_array(2,:),nbins);
+subtitle('20dB');
+xlim([-100 100])
+subplot(613);
+histogram(delay_array(3,:),nbins);
+subtitle('10dB')
+xlim([-100 100])
+subplot(614);
+histogram(delay_array(4,:),nbins);
+subtitle('5dB');
+xlim([-100 100])
+subplot(615);
+histogram(delay_array(5,:),nbins);
+subtitle('0dB');
+xlim([-100 100])
+subplot(616);
+histogram(delay_array(6,:),nbins);
+subtitle('-5dB')
+xlim([-100 100])
 
 
 

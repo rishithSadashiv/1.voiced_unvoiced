@@ -1,0 +1,37 @@
+% To analyse impact of voiced-unvoiced decomposition on voiced components.
+
+
+% free field model: x(n) = as(n+t) + v(n)  [a-attenuation constant,
+% v(n)-noise, t-tdoa]
+
+
+% Room reverberent model: x(n) = h(n)*s(n) + v(n) [h(n)-channel impulse
+% response]
+
+% In noisy conditions, since noise is an additive term, it can be
+% considered the ZFF impulses are robust to noise upto certain SNR
+
+
+clc;
+clear all;
+close all;
+
+[d,fs]=audioread('./arctic_b0399.wav');
+[d_reverb,fs]=audioread('1.audio_withReverb_t60_400.wav');
+
+SNR = 30;
+Px = 0.5*(mean([d(:)].^2));
+Pn = Px*10^(-SNR/10);
+
+rng('default');
+d1 = d + sqrt(Pn)*randn(size(d));
+
+d1=d1-mean(d1);
+d1=d1./max(abs(d1));
+
+mic1_aud = 
+
+
+
+
+

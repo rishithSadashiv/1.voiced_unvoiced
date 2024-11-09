@@ -201,44 +201,73 @@ disp("Correct count -5dB:"+correctCoungNeg5dB);
 
 
 
-writematrix(delay_array, './csv_forPlots/zff_delay_array.csv');
+writematrix(delay_array, './csv_forPlots/zff_delay_array_arctic_b0399.csv');
+writematrix(d_v, './csv_forPlots/zff_delay_vowel_arctic_b0399.csv');
 % writematrix(delay_array, './csv_forPlots/zff_delay_array_2.csv');
 
+nbins = 100;
+figure(2);
+% boxchart(delay_array');
+subplot(611);
+histogram(delay_array(1,:),nbins);
+subtitle('No noise');
+xlim([-100 100])
+subplot(612);
+histogram(delay_array(2,:),nbins);
+subtitle('20dB');
+xlim([-100 100])
+subplot(613);
+histogram(delay_array(3,:),nbins);
+subtitle('10dB')
+xlim([-100 100])
+subplot(614);
+histogram(delay_array(4,:),nbins);
+subtitle('5dB');
+xlim([-100 100])
+subplot(615);
+histogram(delay_array(5,:),nbins);
+subtitle('0dB');
+xlim([-100 100])
+subplot(616);
+histogram(delay_array(6,:),nbins);
+subtitle('-5dB')
+xlim([-100 100])
 
 
-SNR=-5;
-Px = 0.5*(mean([d(:)].^2));
-Pn = Px*10^(-SNR/10);
 
-rng('default');
-d1 = d + sqrt(Pn)*randn(size(d));
-d2 = d + sqrt(Pn)*randn(size(d));
-
-d1=d1-mean(d1);
-d1=d1./max(abs(d1));
-
-d2=d2-mean(d2);
-d2=d2./max(abs(d2));
-
-mic1_aud = 0.9*d1;
-mic2_aud = 0.8*d2;
-
-
-index = 4*frameshift;
-start1 = index;
-start2 = start1+shift;
-end1 = start1+ms30-1;
-end2 = end1+shift;
-wav1 = m1_imp_train(start1:end1);
-wav2 = m2_imp_train(start2:end2);
-
-figure(5);
-subplot(211);
-plot(wav1);
-subplot(212);
-plot(wav2);
-
-delay = computeDelayManual(wav1,wav2);
+% SNR=-5;
+% Px = 0.5*(mean([d(:)].^2));
+% Pn = Px*10^(-SNR/10);
+% 
+% rng('default');
+% d1 = d + sqrt(Pn)*randn(size(d));
+% d2 = d + sqrt(Pn)*randn(size(d));
+% 
+% d1=d1-mean(d1);
+% d1=d1./max(abs(d1));
+% 
+% d2=d2-mean(d2);
+% d2=d2./max(abs(d2));
+% 
+% mic1_aud = 0.9*d1;
+% mic2_aud = 0.8*d2;
+% 
+% 
+% index = 4*frameshift;
+% start1 = index;
+% start2 = start1+shift;
+% end1 = start1+ms30-1;
+% end2 = end1+shift;
+% wav1 = m1_imp_train(start1:end1);
+% wav2 = m2_imp_train(start2:end2);
+% 
+% figure(5);
+% subplot(211);
+% plot(wav1);
+% subplot(212);
+% plot(wav2);
+% 
+% delay = computeDelayManual(wav1,wav2);
 
 
 
