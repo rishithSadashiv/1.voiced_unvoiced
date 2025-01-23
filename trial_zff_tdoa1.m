@@ -49,14 +49,20 @@ m2_imp_train = m2_imp_train(:);
 
 
 
-n=300;
+n=160;
 shift = 16;
 ms30 = 0.03*fs;
 audiolen = length(m2_imp_train);
 frameshift = 0.02*fs;
 
-ste_array = csvread('csv_forPlots\ste_array_noNoise_2.csv');
+% ste_array = csvread('csv_forPlots\ste_array_noNoise_2.csv');
+% ste_array = csvread('csv_forPlots\ste_array_noNoise.csv');
+ste_array = csvread('csv_forPlots\ste_array_noNoise_arctic_a0023.csv');
 ste_array=ste_array(:);
+
+% gad_array = csvread('csv_forPlots\gad_array_noNoise.csv');
+gad_array = csvread('csv_forPlots\gad_array_noNoise_arctic_a0023.csv');
+gad_array=gad_array(:);
 SNRs = [50,20,10,5,0,-5];
 
 d_v = zeros(length(SNRs), 160);
@@ -102,6 +108,8 @@ for p=1:length(SNRs)
     computed_delays = zeros(n,1);
     v=zeros(n,1);
     u=zeros(n,1);
+    n_voiced = 0;
+    n_unvoiced = 0;
     for i = 1:n
         start1 = ((i-1)*frameshift)+1;
         start2 = start1+shift;
@@ -118,11 +126,15 @@ for p=1:length(SNRs)
         estimated_delay = computeDelayManual(mic1_seg, mic2_seg);
         computed_delays(i) = estimated_delay;
         
-        ste_frame = ste_array(i);
-        if(ste_frame > 0.15)
+        % ste_frame = ste_array(i);
+        % if(ste_frame > 0.15)
+        gad_frame = gad_array(i);
+        if(gad_frame > 0.6)
             v(i) = estimated_delay;
+            n_voiced = n_voiced + 1;
         else
             u(i)=estimated_delay;
+            n_unvoiced = n_unvoiced + 1;
         end
     end
     delay_array(p,:) = computed_delays(1:160);
@@ -131,6 +143,7 @@ for p=1:length(SNRs)
 end
 
 correct_estimates = sum(computed_delays(:) == shift);
+disp("correct estimates:")
 disp(correct_estimates);
 
 
@@ -182,18 +195,18 @@ ylim([-50 50])
 % disp("Variance -5dB:"+ var_Neg5dB);
 
 
-correctCount_20dB = sum(d_v(2,:)==17);
-correctCount5dB = sum(d_v(4,:)==17);
-correctCoungNeg5dB = sum(d_v(6,:)==17);
-
+disp("Voiced:")
+correctCount_20dB = sum(d_v(2,:)==16);
+correctCount5dB = sum(d_v(4,:)==16);
+correctCoungNeg5dB = sum(d_v(6,:)==16);
 disp("Correct count 20dB:"+correctCount_20dB);
 disp("Correct count 5dB:"+correctCount5dB);
 disp("Correct count -5dB:"+correctCoungNeg5dB);
 
-correctCount_20dB = sum(d_uv(2,:)==17);
-correctCount5dB = sum(d_uv(4,:)==17);
-correctCoungNeg5dB = sum(d_uv(6,:)==17);
-
+disp("Unvoiced:")
+correctCount_20dB = sum(d_uv(2,:)==16);
+correctCount5dB = sum(d_uv(4,:)==16);
+correctCoungNeg5dB = sum(d_uv(6,:)==16);
 disp("Correct count 20dB:"+correctCount_20dB);
 disp("Correct count 5dB:"+correctCount5dB);
 disp("Correct count -5dB:"+correctCoungNeg5dB);
@@ -202,7 +215,7 @@ disp("Correct count -5dB:"+correctCoungNeg5dB);
 
 
 writematrix(delay_array, './csv_forPlots/zff_delay_array_arctic_b0399.csv');
-writematrix(d_v, './csv_forPlots/zff_delay_vowel_arctic_b0399.csv');
+writematrix(d_v, './csv_forPlots/zff_delay_vowel_arctic_a0023.csv');
 % writematrix(delay_array, './csv_forPlots/zff_delay_array_2.csv');
 
 nbins = 100;

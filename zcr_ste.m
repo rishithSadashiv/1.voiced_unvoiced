@@ -6,10 +6,10 @@ clc;
 clear all;
 close all;
 
-% [d,fs]=audioread('./arctic_b0399.wav');
-[d,fs]=audioread('new_wavs/arctic_a0023.wav');
+[d,fs]=audioread('./arctic_b0399.wav');
+% [d,fs]=audioread('new_wavs/arctic_a0023.wav');
 d=d(:,1);
-noise = 1;
+noise = 0;
 
 if(noise == 1)
     
@@ -48,7 +48,7 @@ audiolen = length(d);
 zcr_array = [];
 ste_array = [];
 
-vad = [];
+gad = [];
 p=mic1_aud;
 for i = 1:n
     start1 = ((i-1)*frameshift)+1;
@@ -64,21 +64,23 @@ for i = 1:n
     
     zcr_array(i) = zerocrossrate(mic1_seg);
     ste_array(i) = sum(buffer(mic1_seg.^2, length(mic1_seg)));
-    vad(i) = sum(buffer(b.^2, length(b)));
+    gad(i) = sum(buffer(b.^2, length(b)));
 
 end
 
 disp(max(ste_array));
+disp(max(gad));
 
 ste_array = ste_array./max(ste_array);
+gad = gad./max(gad);
 
-vad = vad./max(vad);
+
 figure(1);
 subplot(311);
 plot(d);
 title('Speech');
 subplot(312);
-plot(vad(:))
+plot(gad(:))
 title('Glottal Activity Detector using ZFF');
 % subplot(413);
 % plot(zcr_array(:))
@@ -86,5 +88,6 @@ subplot(313);
 plot(ste_array(:))
 title('Short Term Energy');
 
-writematrix(ste_array, 'csv_forPlots/ste_array_noNoise_2.csv');
+writematrix(ste_array, 'csv_forPlots/ste_array_noNoise_arctic_b0399.csv');
+writematrix(gad, 'csv_forPlots/gad_array_noNoise_arctic_b0399.csv');
     
