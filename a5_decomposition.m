@@ -62,7 +62,9 @@ noise_comps(mag_X1n_dash >= mag_X1h_dash) = 1; % indicating the indeces which co
 
 % Signal Reconstruction
 
-res_noiseX_dash = res_X .* noise_comps;
+% res_noiseX_dash = res_X .* noise_comps;
+res_noiseX_dash = zeros(N,1);
+res_noiseX_dash(noise_comps==1) = res_X(noise_comps==1);
 res_noise_dash = real(ifft(res_noiseX_dash, N));
 
 
@@ -81,6 +83,7 @@ rm_minus1_hat = r0_hat;
 
 %% mth iteration
 
+i=1;
 n_iterations = 10;
 while (i <= n_iterations)
 
