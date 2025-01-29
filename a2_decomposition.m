@@ -18,7 +18,7 @@ d=d-mean(d);
 d=d./max(abs(d));
 
 
-voiced_index = 5520/2;%11648;
+voiced_index = 5520;%11648;
 unvoiced_index = 22336;
 ms30 = 0.032*fs;
 
